@@ -49,6 +49,31 @@ const restaurants: Restaurant[] = [
     price_range_id: "5",
   },
 ];
+
+function getRandomString(length = 20) {
+  const characters =
+    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+  let result = "";
+
+  for (let i = 0; i < length; i++) {
+    const randomIndex = Math.floor(Math.random() * characters.length);
+    result += characters.charAt(randomIndex);
+  }
+
+  return result;
+}
+
+function randomizeRestaurantIds() {
+  restaurants.forEach((restaurant) => {
+    restaurant.id = getRandomString();
+  });
+  console.log("Restaurant IDs have been randomized:", restaurants);
+}
+
+randomizeRestaurantIds();
+
+setInterval(randomizeRestaurantIds, 1800000);
+
 app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
 
 // Get all restaurants
