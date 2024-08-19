@@ -1,74 +1,102 @@
 import express, { Request, Response } from "express";
 import { Restaurant } from "../types/Restaurant";
+import { randomizeRestaurantIds } from "../src/utils/randomizeRestaurantIds";
+import { Filter } from "../types/Filter";
+import { PrismaClient } from "@prisma/client";
 
 const app = express();
-const restaurants: Restaurant[] = [
+const prisma = new PrismaClient();
+
+export const filters: Filter[] = [
   {
-    id: "1",
-    name: "Gourmet Burger Bistro",
-    rating: 4.7,
-    filter_ids: ["1"],
-    image_url: "https://example.com/images/gourmet-burger-bistro.jpg",
-    delivery_time_minutes: 35,
-    price_range_id: "2",
+    id: "1a2b3c4d5e6f7g8h9i0j",
+    name: "Vegan",
+    image_url: "https://example.com/images/vegan.jpg",
   },
   {
-    id: "2",
-    name: "Pasta Palace",
-    rating: 4.5,
-    filter_ids: ["2"],
-    image_url: "https://example.com/images/pasta-palace.jpg",
-    delivery_time_minutes: 30,
-    price_range_id: "3",
+    id: "2b3c4d5e6f7g8h9i0j1a",
+    name: "Gluten-Free",
+    image_url: "https://example.com/images/gluten-free.jpg",
   },
   {
-    id: "3",
-    name: "Sushi Central",
-    rating: 4.9,
-    filter_ids: ["3"],
-    image_url: "https://example.com/images/sushi-central.jpg",
-    delivery_time_minutes: 45,
-    price_range_id: "4",
+    id: "3c4d5e6f7g8h9i0j1a2b",
+    name: "Organic",
+    image_url: "https://example.com/images/organic.jpg",
   },
   {
-    id: "4",
-    name: "Veggie Delight",
-    rating: 4.3,
-    filter_ids: ["1"],
-    image_url: "https://example.com/images/veggie-delight.jpg",
-    delivery_time_minutes: 25,
-    price_range_id: "1",
+    id: "4d5e6f7g8h9i0j1a2b3c",
+    name: "Low Carb",
+    image_url: "https://example.com/images/low-carb.jpg",
   },
   {
-    id: "5",
-    name: "Steakhouse Supreme",
-    rating: 4.8,
-    filter_ids: ["5"],
-    image_url: "https://example.com/images/steakhouse-supreme.jpg",
-    delivery_time_minutes: 50,
-    price_range_id: "5",
+    id: "5e6f7g8h9i0j1a2b3c4d",
+    name: "Halal",
+    image_url: "https://example.com/images/halal.jpg",
   },
 ];
 
-function getRandomString(length = 20) {
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-  let result = "";
-
-  for (let i = 0; i < length; i++) {
-    const randomIndex = Math.floor(Math.random() * characters.length);
-    result += characters.charAt(randomIndex);
-  }
-
-  return result;
-}
-
-function randomizeRestaurantIds() {
-  restaurants.forEach((restaurant) => {
-    restaurant.id = getRandomString();
+async function main() {
+  await prisma.restaurant.createMany({
+    data: [
+      {
+        id: "1",
+        name: "Gourmet Burger Bistro",
+        rating: 4.7,
+        filter_ids: ["1"],
+        image_url: "https://example.com/images/gourmet-burger-bistro.jpg",
+        delivery_time_minutes: 35,
+        price_range_id: "2",
+      },
+      {
+        id: "2",
+        name: "Pasta Palace",
+        rating: 4.5,
+        filter_ids: ["2"],
+        image_url: "https://example.com/images/pasta-palace.jpg",
+        delivery_time_minutes: 30,
+        price_range_id: "3",
+      },
+      {
+        id: "3",
+        name: "Sushi Central",
+        rating: 4.9,
+        filter_ids: ["3"],
+        image_url: "https://example.com/images/sushi-central.jpg",
+        delivery_time_minutes: 45,
+        price_range_id: "4",
+      },
+      {
+        id: "4",
+        name: "Veggie Delight",
+        rating: 4.3,
+        filter_ids: ["1"],
+        image_url: "https://example.com/images/veggie-delight.jpg",
+        delivery_time_minutes: 25,
+        price_range_id: "1",
+      },
+      {
+        id: "5",
+        name: "Steakhouse Supreme",
+        rating: 4.8,
+        filter_ids: ["5"],
+        image_url: "https://example.com/images/steakhouse-supreme.jpg",
+        delivery_time_minutes: 50,
+        price_range_id: "5",
+      },
+    ],
+    skipDuplicates: true,
   });
-  console.log("Restaurant IDs have been randomized:", restaurants);
 }
+
+main()
+  .then(async () => {
+    await prisma.$disconnect();
+  })
+  .catch(async (e) => {
+    console.error(e);
+    await prisma.$disconnect();
+    process.exit(1);
+  });
 
 randomizeRestaurantIds();
 
@@ -77,13 +105,17 @@ setInterval(randomizeRestaurantIds, 1800000);
 app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
 
 // Get all restaurants
-app.get("/restaurants", (req: Request, res: Response) => res.send(restaurants));
+app.get("/restaurants", async (req: Request, res: Response) => {
+  const restaurants = await prisma.restaurant.findMany();
+  res.send(restaurants);
+});
 
 // Get restaurant by id
-app.get("/restaurants/:id", (req: Request, res: Response) => {
+app.get("/restaurants/:id", async (req: Request, res: Response) => {
   const id = req.params.id;
+  const restaurants = await prisma.restaurant.findMany();
 
-  const item = restaurants.find((item: Restaurant) => item.id === id);
+  const item = restaurants.find((item: any) => item.id === id);
 
   res.send(item);
 });
