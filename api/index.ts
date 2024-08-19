@@ -86,6 +86,8 @@ async function main() {
     ],
     skipDuplicates: true,
   });
+  const restaurants = await prisma.restaurant.findMany();
+  console.log(restaurants);
 }
 
 main()
@@ -98,9 +100,9 @@ main()
     process.exit(1);
   });
 
-randomizeRestaurantIds();
+// randomizeRestaurantIds();
 
-setInterval(randomizeRestaurantIds, 1800000);
+// setInterval(randomizeRestaurantIds, 1800000);
 
 app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
 
