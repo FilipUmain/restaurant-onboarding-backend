@@ -6,31 +6,41 @@ import { PrismaClient } from "@prisma/client";
 const app = express();
 const prisma = new PrismaClient();
 
-export const filters: Filter[] = [
+const filters: Filter[] = [
   {
-    id: "1a2b3c4d5e6f7g8h9i0j",
-    name: "Vegan",
-    image_url: "https://example.com/images/vegan.jpg",
+    id: "e2800cd8-763a-4716-963a-5a41b6d8d1ae",
+    name: "Hamburger",
+    image_url: "/images/hamburger.png",
   },
   {
-    id: "2b3c4d5e6f7g8h9i0j1a",
-    name: "Gluten-Free",
-    image_url: "https://example.com/images/gluten-free.jpg",
+    id: "657b2a62-9c3a-4c6c-81a9-8309d2b11ed9",
+    name: "Pizza",
+    image_url: "/images/pizza.png",
   },
   {
-    id: "3c4d5e6f7g8h9i0j1a2b",
-    name: "Organic",
-    image_url: "https://example.com/images/organic.jpg",
+    id: "803582a6-92eb-42c8-be6b-f0bd1d27263f",
+    name: "Taco´s",
+    image_url: "/images/taco.png",
   },
   {
-    id: "4d5e6f7g8h9i0j1a2b3c",
-    name: "Low Carb",
-    image_url: "https://example.com/images/low-carb.jpg",
+    id: "b06e4686-94bb-4adc-befb-c535102b909c",
+    name: "Coffee",
+    image_url: "/images/coffee.png",
   },
   {
-    id: "5e6f7g8h9i0j1a2b3c4d",
-    name: "Halal",
-    image_url: "https://example.com/images/halal.jpg",
+    id: "82bf51fd-d37d-46f0-9635-f67d7a00bcc0",
+    name: "Burrito",
+    image_url: "/images/burrito.png",
+  },
+  {
+    id: "775edaa0-84bd-4c1d-ad2b-868935f4a997",
+    name: "Fries",
+    image_url: "/images/fries.png",
+  },
+  {
+    id: "f06f89eb-2a8a-4ed8-860e-f9166adacf32",
+    name: "Breakfast",
+    image_url: "/images/breakfast.png",
   },
 ];
 
@@ -38,55 +48,85 @@ async function main() {
   await prisma.restaurant.createMany({
     data: [
       {
-        id: "1",
-        name: "Gourmet Burger Bistro",
-        rating: 4.7,
-        filter_ids: ["1"],
-        image_url: "https://example.com/images/gourmet-burger-bistro.jpg",
-        delivery_time_minutes: 35,
-        price_range_id: "2",
-      },
-      {
-        id: "2",
-        name: "Pasta Palace",
+        id: "a569a2da-117d-4fc1-8036-4cf2beab62f9",
+        name: "Waynes Coffee",
         rating: 4.5,
-        filter_ids: ["2"],
-        image_url: "https://example.com/images/pasta-palace.jpg",
+        filter_ids: ["b06e4686-94bb-4adc-befb-c535102b909c"],
+        image_url: "/images/coffee.png",
         delivery_time_minutes: 30,
-        price_range_id: "3",
+        price_range_id: "bc9e61c6-1a6d-4231-b623-5b8995209724",
       },
       {
-        id: "3",
-        name: "Sushi Central",
-        rating: 4.9,
-        filter_ids: ["3"],
-        image_url: "https://example.com/images/sushi-central.jpg",
+        id: "714e1fca-e7af-4f82-bf60-7d210c1950f3",
+        name: "Oskars Tacos",
+        rating: 3.8,
+        filter_ids: ["803582a6-92eb-42c8-be6b-f0bd1d27263f"],
+        image_url: "/images/taco.png",
         delivery_time_minutes: 45,
-        price_range_id: "4",
+        price_range_id: "b7d3879a-6256-4c02-90c0-83f608c7c02d",
       },
       {
-        id: "4",
-        name: "Veggie Delight",
+        id: "618dd9ff-8165-4332-b3fa-e773adc254a8",
+        name: "Dawids Deli",
+        rating: 4.9,
+        filter_ids: [
+          "775edaa0-84bd-4c1d-ad2b-868935f4a997",
+          "82bf51fd-d37d-46f0-9635-f67d7a00bcc0",
+        ],
+        image_url: "/images/fries.png",
+        delivery_time_minutes: 60,
+        price_range_id: "524539ed-de0f-4a4d-abff-9e6eff5f55f8",
+      },
+      {
+        id: "43c69811-9317-4be5-991f-cfd94158af71",
+        name: "Viktors Valmofrön & Potatis",
+        rating: 4.2,
+        filter_ids: [
+          "657b2a62-9c3a-4c6c-81a9-8309d2b11ed9",
+          "775edaa0-84bd-4c1d-ad2b-868935f4a997",
+        ],
+        image_url: "/images/pizza.png",
+        delivery_time_minutes: 30,
+        price_range_id: "b7d3879a-6256-4c02-90c0-83f608c7c02d",
+      },
+      {
+        id: "23fb9771-c843-409e-be91-3a2a90716418",
+        name: "Sebbes Slizes",
         rating: 4.3,
-        filter_ids: ["1"],
-        image_url: "https://example.com/images/veggie-delight.jpg",
-        delivery_time_minutes: 25,
-        price_range_id: "1",
+        filter_ids: ["657b2a62-9c3a-4c6c-81a9-8309d2b11ed9"],
+        image_url: "/images/pizza.png",
+        delivery_time_minutes: 45,
+        price_range_id: "bc9e61c6-1a6d-4231-b623-5b8995209724",
       },
       {
-        id: "5",
-        name: "Steakhouse Supreme",
-        rating: 4.8,
-        filter_ids: ["5"],
-        image_url: "https://example.com/images/steakhouse-supreme.jpg",
-        delivery_time_minutes: 50,
-        price_range_id: "5",
+        id: "a6e9fccc-a6a4-4a24-bc54-608706f1d90d",
+        name: "Karls Korv (vegan)",
+        rating: 4.4,
+        filter_ids: ["f06f89eb-2a8a-4ed8-860e-f9166adacf32"],
+        image_url: "/images/breakfast.png",
+        delivery_time_minutes: 20,
+        price_range_id: "8bca616e-47ee-47f3-b455-c972cac4b233",
+      },
+      {
+        id: "2aa2bb01-5cdd-45ea-a24d-71ce608644b0",
+        name: "Emils Elit-biffar",
+        rating: 4.5,
+        filter_ids: ["e2800cd8-763a-4716-963a-5a41b6d8d1ae"],
+        image_url: "/images/hamburger.png",
+        delivery_time_minutes: 60,
+        price_range_id: "524539ed-de0f-4a4d-abff-9e6eff5f55f8",
       },
     ],
     skipDuplicates: true,
   });
-  const restaurants = await prisma.restaurant.findMany();
-  console.log(restaurants);
+  await prisma.filter.createMany({
+    data: filters,
+
+    skipDuplicates: true,
+  });
+
+  //   const restaurants = await prisma.restaurant.findMany();
+  //   console.log(restaurants);
 }
 
 main()
