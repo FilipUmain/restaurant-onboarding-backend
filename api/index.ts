@@ -135,6 +135,6 @@ app.get("/price-range/:id", (req: Request, res: Response) =>
   res.send("price-range")
 );
 
-app.listen(5232, () => console.log("Server running on port 3000."));
+app.listen(3000, () => console.log("Server running on port 3000."));
 
 module.exports = app;
