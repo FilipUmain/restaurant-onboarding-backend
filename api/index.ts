@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import { Restaurant } from "../types/Restaurant";
-import { randomizeRestaurantIds } from "../src/utils/randomizeRestaurantIds";
 import { Filter } from "../types/Filter";
 import { PrismaClient } from "@prisma/client";
 
