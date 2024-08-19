@@ -49,6 +49,7 @@ const restaurants: Restaurant[] = [
     price_range_id: "5",
   },
 ];
+app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
 
 // Get all restaurants
 app.get("/restaurants", (req: Request, res: Response) => res.send(restaurants));
@@ -68,7 +69,7 @@ app.get("/filter", (req: Request, res: Response) => res.send("filter"));
 // Get filter by id
 app.get("/filter/:id", (req: Request, res: Response) => res.send("filter"));
 
-// Get Open status by id
+// Get open status by id
 app.get("/open/id", (req: Request, res: Response) => res.send("open"));
 
 // Get price-range by id
