@@ -13,6 +13,7 @@
     "typescript": "^5.1.3"
   },
   "scripts": {
-    "dev": "nodemon api/index.ts"
+    "dev": "nodemon api/index.ts",
+    "postinstall": "prisma generate"
   }
 }
