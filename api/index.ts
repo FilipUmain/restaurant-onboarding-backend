@@ -81,7 +81,7 @@ app.get("/restaurants", (req: Request, res: Response) => res.send(restaurants));
 
 // Get restaurant by id
 app.get("/restaurants/:id", (req: Request, res: Response) => {
-  const id = JSON.parse(req.params.id);
+  const id = req.params.id;
 
   const item = restaurants.find((item: Restaurant) => item.id === id);
 
