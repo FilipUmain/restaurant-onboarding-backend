@@ -1,6 +1,5 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid";
 import path from "path";
 import cors from "cors";
 
@@ -75,6 +74,7 @@ app.get("/filter/:id", async (req: Request, res: Response) => {
   }
 });
 
+// Get open status
 app.get("/open/:id", async (req: Request, res: Response) => {
   const resId = req.params.id;
 
@@ -95,6 +95,7 @@ app.get("/open/:id", async (req: Request, res: Response) => {
   }
 });
 
+// Get price-range
 app.get("/price-range/:id", async (req: Request, res: Response) => {
   const priceId = req.params.id;
 
