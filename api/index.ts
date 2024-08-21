@@ -155,7 +155,7 @@ app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
 app.use("/images", express.static(path.join(__dirname, "images")));
 
 app.get("/images", (req, res) => {
-  res.send("Images are served at /images/[image-name].");
+  res.send("");
 });
 
 // Get all restaurants
