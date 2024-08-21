@@ -133,22 +133,22 @@ const seedRestaurantFilters = async () => {
   }
 };
 
-const main = async () => {
-  await seedPriceRanges();
-  await seedFilters();
-  await seedRestaurants();
-  await seedStatuses();
-  await seedRestaurantFilters();
-};
+// const main = async () => {
+//   await seedPriceRanges();
+//   await seedFilters();
+//   await seedRestaurants();
+//   await seedStatuses();
+//   await seedRestaurantFilters();
+// };
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+// main()
+//   .catch((e) => {
+//     console.error(e);
+//     process.exit(1);
+//   })
+//   .finally(async () => {
+//     await prisma.$disconnect();
+//   });
 
 app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
 
