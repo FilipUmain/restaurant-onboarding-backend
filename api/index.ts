@@ -115,6 +115,17 @@ const restaurants = [
   },
 ];
 
+const main = async () => {};
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
 // Define routes for the Express app
 app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
 
@@ -176,13 +187,28 @@ app.get("/filter/:id", async (req: Request, res: Response) => {
   }
 });
 
-// Define other routes as needed
 app.get("/open/id", (req: Request, res: Response) => res.send("open"));
-app.get("/price-range/:id", (req: Request, res: Response) =>
-  res.send("price-range")
-);
 
-// Start the Express server
+app.get("/price-range/:id", async (req: Request, res: Response) => {
+  const priceId = req.params.id;
+
+  try {
+    const priceRange = await prisma.priceRange.findUnique({
+      where: { id: priceId },
+    });
+
+    if (priceRange) {
+      res.send(priceRange);
+    } else {
+      res.status(404).send({ error: "Price range not found" });
+    }
+  } catch (error) {
+    res
+      .status(500)
+      .send({ error: "An error occurred while fetching the price range" });
+  }
+});
+
 app.listen(3000, () => console.log("Server running on port 3000."));
 
 export default app;
