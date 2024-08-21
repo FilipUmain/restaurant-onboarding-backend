@@ -10,17 +10,47 @@ datasource db {
 }
 
 model Restaurant {
-  id String @id 
-  name String 
-  rating Int
-  filter_ids String[]
-  image_url String
+  id                    String          @id @default(cuid())
+  name                  String 
+  rating                Int
+  image_url             String
   delivery_time_minutes Int
-  price_range_id String
+  priceRangeId          String?
+  status                Status?
+  filters               RestaurantFilter[]
+
+  priceRange            PriceRange?     @relation(fields: [priceRangeId], references: [id])
 }
 
 model Filter {
-  id String @id
-  name String 
-  image_url String
+  id            String            @id @default(cuid())
+  name          String 
+  image_url     String
+  restaurants   RestaurantFilter[]
 }
+
+model RestaurantFilter {
+  id            String     @id @default(cuid())
+  restaurantId  String
+  filterId      String
+  restaurant    Restaurant @relation(fields: [restaurantId], references: [id])
+  filter        Filter     @relation(fields: [filterId], references: [id])
+
+  @@unique([restaurantId, filterId])
+}
+
+model Status {
+  id              String     @id @default(cuid())
+  is_currently_open Boolean
+  restaurantId   String
+  restaurant      Restaurant  @relation(fields: [restaurantId], references: [id])
+
+  @@unique([restaurantId])
+}
+
+model PriceRange {
+  id              String       @id @default(cuid())
+  range           String
+  restaurants     Restaurant[] 
+}
+

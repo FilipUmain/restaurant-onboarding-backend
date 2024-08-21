@@ -115,58 +115,6 @@ const restaurants = [
   },
 ];
 
-function generateRandomId(): string {
-  return uuidv4();
-}
-
-async function randomizeRestaurantIds() {
-  try {
-    const restaurants = await prisma.restaurant.findMany();
-
-    for (const restaurant of restaurants) {
-      await prisma.restaurant.update({
-        where: { id: restaurant.id },
-        data: { id: generateRandomId() },
-      });
-    }
-
-    console.log("Restaurant IDs have been updated.");
-  } catch (error) {
-    console.error("Error updating restaurant IDs:", error);
-  }
-}
-
-setInterval(randomizeRestaurantIds, 30 * 60 * 1000);
-
-async function seedDatabase() {
-  try {
-    await prisma.restaurant.createMany({
-      data: restaurants,
-      skipDuplicates: true,
-    });
-
-    await prisma.filter.createMany({
-      data: filters,
-      skipDuplicates: true,
-    });
-
-    console.log("Database has been seeded with initial data.");
-  } catch (error) {
-    console.error("Error seeding the database:", error);
-  }
-}
-
-// Call seedDatabase function to seed initial data
-seedDatabase()
-  .then(async () => {
-    await prisma.$disconnect();
-  })
-  .catch(async (e) => {
-    console.error(e);
-    await prisma.$disconnect();
-    process.exit(1);
-  });
-
 // Define routes for the Express app
 app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
 
