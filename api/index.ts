@@ -1,6 +1,6 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
-import { v4 as uuidv4 } from "uuid"; // Using uuid package for generating UUIDs
+import { v4 as uuidv4 } from "uuid";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -115,16 +115,16 @@ const restaurants = [
   },
 ];
 
-const main = async () => {};
+// const main = async () => {};
 
-main()
-  .catch((e) => {
-    console.error(e);
-    process.exit(1);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
+// main()
+//   .catch((e) => {
+//     console.error(e);
+//     process.exit(1);
+//   })
+//   .finally(async () => {
+//     await prisma.$disconnect();
+//   });
 
 // Define routes for the Express app
 app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
@@ -187,7 +187,28 @@ app.get("/filter/:id", async (req: Request, res: Response) => {
   }
 });
 
-app.get("/open/id", (req: Request, res: Response) => res.send("open"));
+app.get("/open/:id", async (req: Request, res: Response) => {
+  const resId = req.params.id;
+
+  try {
+    // Query the Status table for the status of the restaurant with the given ID
+    const status = await prisma.status.findUnique({
+      where: { restaurantId: resId },
+    });
+
+    // Check if the status was found
+    if (status) {
+      res.send(status);
+    } else {
+      res.status(404).send({ error: "Restaurant status not found" });
+    }
+  } catch (error) {
+    // Handle any errors that may occur during the query
+    res
+      .status(500)
+      .send({ error: "An error occurred while fetching the status" });
+  }
+});
 
 app.get("/price-range/:id", async (req: Request, res: Response) => {
   const priceId = req.params.id;
