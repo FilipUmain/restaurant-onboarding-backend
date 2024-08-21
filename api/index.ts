@@ -1,6 +1,7 @@
 import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
+import path from "path";
 
 const prisma = new PrismaClient();
 const app = express();
@@ -150,6 +151,12 @@ main()
   });
 
 app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
+
+app.use("/images", express.static(path.join(__dirname, "images")));
+
+app.get("/images", (req, res) => {
+  res.send("Images are served at /images/[image-name].");
+});
 
 // Get all restaurants
 app.get("/restaurants", async (req: Request, res: Response) => {
