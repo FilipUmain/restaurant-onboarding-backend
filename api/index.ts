@@ -2,9 +2,12 @@ import express, { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { v4 as uuidv4 } from "uuid";
 import path from "path";
+import cors from "cors";
 
 const prisma = new PrismaClient();
 const app = express();
+
+app.use(cors());
 
 const seedPriceRanges = async () => {
   const priceRangeCount = await prisma.priceRange.count();
