@@ -5,128 +5,150 @@ import { v4 as uuidv4 } from "uuid";
 const prisma = new PrismaClient();
 const app = express();
 
-const filters = [
-  {
-    id: "e2800cd8-763a-4716-963a-5a41b6d8d1ae",
-    name: "Hamburger",
-    image_url: "/images/hamburger.png",
-  },
-  {
-    id: "657b2a62-9c3a-4c6c-81a9-8309d2b11ed9",
-    name: "Pizza",
-    image_url: "/images/pizza.png",
-  },
-  {
-    id: "803582a6-92eb-42c8-be6b-f0bd1d27263f",
-    name: "Taco´s",
-    image_url: "/images/taco.png",
-  },
-  {
-    id: "b06e4686-94bb-4adc-befb-c535102b909c",
-    name: "Coffee",
-    image_url: "/images/coffee.png",
-  },
-  {
-    id: "82bf51fd-d37d-46f0-9635-f67d7a00bcc0",
-    name: "Burrito",
-    image_url: "/images/burrito.png",
-  },
-  {
-    id: "775edaa0-84bd-4c1d-ad2b-868935f4a997",
-    name: "Fries",
-    image_url: "/images/fries.png",
-  },
-  {
-    id: "f06f89eb-2a8a-4ed8-860e-f9166adacf32",
-    name: "Breakfast",
-    image_url: "/images/breakfast.png",
-  },
-];
+const seedPriceRanges = async () => {
+  const priceRangeCount = await prisma.priceRange.count();
+  if (priceRangeCount === 0) {
+    await prisma.priceRange.createMany({
+      data: [
+        { range: "$" },
+        { range: "$$" },
+        { range: "$$$" },
+        { range: "$$$$" },
+      ],
+    });
+    console.log("PriceRanges seeded");
+  } else {
+    console.log("PriceRanges already seeded");
+  }
+};
 
-const restaurants = [
-  {
-    id: "a569a2da-117d-4fc1-8036-4cf2beab62f9",
-    name: "Waynes Coffee",
-    rating: 4.5,
-    filter_ids: ["b06e4686-94bb-4adc-befb-c535102b909c"],
-    image_url: "/images/coffee.png",
-    delivery_time_minutes: 30,
-    price_range_id: "bc9e61c6-1a6d-4231-b623-5b8995209724",
-  },
-  {
-    id: "714e1fca-e7af-4f82-bf60-7d210c1950f3",
-    name: "Oskars Tacos",
-    rating: 3.8,
-    filter_ids: ["803582a6-92eb-42c8-be6b-f0bd1d27263f"],
-    image_url: "/images/taco.png",
-    delivery_time_minutes: 45,
-    price_range_id: "b7d3879a-6256-4c02-90c0-83f608c7c02d",
-  },
-  {
-    id: "618dd9ff-8165-4332-b3fa-e773adc254a8",
-    name: "Dawids Deli",
-    rating: 4.9,
-    filter_ids: [
-      "775edaa0-84bd-4c1d-ad2b-868935f4a997",
-      "82bf51fd-d37d-46f0-9635-f67d7a00bcc0",
-    ],
-    image_url: "/images/fries.png",
-    delivery_time_minutes: 60,
-    price_range_id: "524539ed-de0f-4a4d-abff-9e6eff5f55f8",
-  },
-  {
-    id: "43c69811-9317-4be5-991f-cfd94158af71",
-    name: "Viktors Valmofrön & Potatis",
-    rating: 4.2,
-    filter_ids: [
-      "657b2a62-9c3a-4c6c-81a9-8309d2b11ed9",
-      "775edaa0-84bd-4c1d-ad2b-868935f4a997",
-    ],
-    image_url: "/images/pizza.png",
-    delivery_time_minutes: 30,
-    price_range_id: "b7d3879a-6256-4c02-90c0-83f608c7c02d",
-  },
-  {
-    id: "23fb9771-c843-409e-be91-3a2a90716418",
-    name: "Sebbes Slizes",
-    rating: 4.3,
-    filter_ids: ["657b2a62-9c3a-4c6c-81a9-8309d2b11ed9"],
-    image_url: "/images/pizza.png",
-    delivery_time_minutes: 45,
-    price_range_id: "bc9e61c6-1a6d-4231-b623-5b8995209724",
-  },
-  {
-    id: "a6e9fccc-a6a4-4a24-bc54-608706f1d90d",
-    name: "Karls Korv (vegan)",
-    rating: 4.4,
-    filter_ids: ["f06f89eb-2a8a-4ed8-860e-f9166adacf32"],
-    image_url: "/images/breakfast.png",
-    delivery_time_minutes: 20,
-    price_range_id: "8bca616e-47ee-47f3-b455-c972cac4b233",
-  },
-  {
-    id: "2aa2bb01-5cdd-45ea-a24d-71ce608644b0",
-    name: "Emils Elit-biffar",
-    rating: 4.5,
-    filter_ids: ["e2800cd8-763a-4716-963a-5a41b6d8d1ae"],
-    image_url: "/images/hamburger.png",
-    delivery_time_minutes: 60,
-    price_range_id: "524539ed-de0f-4a4d-abff-9e6eff5f55f8",
-  },
-];
+const seedFilters = async () => {
+  const filterCount = await prisma.filter.count();
+  if (filterCount === 0) {
+    await prisma.filter.createMany({
+      data: [
+        { name: "Vegan", image_url: "vegan.jpg" },
+        { name: "Family Friendly", image_url: "family_friendly.jpg" },
+        { name: "Fast Food", image_url: "fast_food.jpg" },
+        { name: "Fine Dining", image_url: "fine_dining.jpg" },
+      ],
+    });
+    console.log("Filters seeded");
+  } else {
+    console.log("Filters already seeded");
+  }
+};
 
-// const main = async () => {};
+const seedRestaurants = async () => {
+  const restaurantCount = await prisma.restaurant.count();
+  if (restaurantCount === 0) {
+    const priceRanges = await prisma.priceRange.findMany();
 
-// main()
-//   .catch((e) => {
-//     console.error(e);
-//     process.exit(1);
-//   })
-//   .finally(async () => {
-//     await prisma.$disconnect();
-//   });
+    await prisma.restaurant.createMany({
+      data: [
+        {
+          name: "Vegan Bistro",
+          rating: 5,
+          image_url: "vegan_bistro.jpg",
+          delivery_time_minutes: 30,
+          priceRangeId: priceRanges[0].id, // Assuming 0 index corresponds to "$"
+        },
+        {
+          name: "Family Delight",
+          rating: 4,
+          image_url: "family_delight.jpg",
+          delivery_time_minutes: 45,
+          priceRangeId: priceRanges[1].id, // Assuming 1 index corresponds to "$$"
+        },
+        // Add more restaurants here
+      ],
+    });
 
-// Define routes for the Express app
+    console.log("Restaurants seeded");
+  } else {
+    console.log("Restaurants already seeded");
+  }
+};
+
+const seedStatuses = async () => {
+  const restaurantCount = await prisma.restaurant.count();
+  const statusCount = await prisma.status.count();
+
+  // Create a status for each restaurant only if statuses are not already seeded
+  if (restaurantCount > 0 && statusCount === 0) {
+    const restaurants = await prisma.restaurant.findMany();
+
+    for (const restaurant of restaurants) {
+      await prisma.status.create({
+        data: {
+          is_currently_open: Math.random() < 0.5, // Randomly determine if the restaurant is open
+          restaurantId: restaurant.id,
+        },
+      });
+    }
+
+    console.log("Statuses seeded");
+  } else if (statusCount > 0) {
+    console.log("Statuses already seeded");
+  } else {
+    console.log("No restaurants to seed statuses for");
+  }
+};
+
+const seedRestaurantFilters = async () => {
+  const restaurantCount = await prisma.restaurant.count();
+  const filterCount = await prisma.filter.count();
+
+  if (restaurantCount > 0 && filterCount > 0) {
+    const restaurantFilters: any = [];
+
+    const restaurants = await prisma.restaurant.findMany();
+    const filters = await prisma.filter.findMany();
+
+    // Assign each restaurant 2 random filters
+    restaurants.forEach((restaurant) => {
+      const assignedFilters = new Set();
+      while (assignedFilters.size < 2) {
+        const randomFilter =
+          filters[Math.floor(Math.random() * filters.length)];
+        assignedFilters.add(randomFilter.id);
+      }
+
+      assignedFilters.forEach((filterId) => {
+        restaurantFilters.push({
+          restaurantId: restaurant.id,
+          filterId,
+        });
+      });
+    });
+
+    await prisma.restaurantFilter.createMany({
+      data: restaurantFilters,
+    });
+
+    console.log("RestaurantFilters seeded");
+  } else {
+    console.log("No restaurants or filters to seed RestaurantFilters");
+  }
+};
+
+const main = async () => {
+  await seedPriceRanges();
+  await seedFilters();
+  await seedRestaurants();
+  await seedStatuses();
+  await seedRestaurantFilters();
+};
+
+main()
+  .catch((e) => {
+    console.error(e);
+    process.exit(1);
+  })
+  .finally(async () => {
+    await prisma.$disconnect();
+  });
+
 app.get("/", (req: Request, res: Response) => res.send("Good luck ;)"));
 
 // Get all restaurants
@@ -191,19 +213,16 @@ app.get("/open/:id", async (req: Request, res: Response) => {
   const resId = req.params.id;
 
   try {
-    // Query the Status table for the status of the restaurant with the given ID
     const status = await prisma.status.findUnique({
       where: { restaurantId: resId },
     });
 
-    // Check if the status was found
     if (status) {
       res.send(status);
     } else {
       res.status(404).send({ error: "Restaurant status not found" });
     }
   } catch (error) {
-    // Handle any errors that may occur during the query
     res
       .status(500)
       .send({ error: "An error occurred while fetching the status" });
